@@ -1,0 +1,7 @@
+{
+    "cmake.ignoreCMakeListsMissing": true,
+    "discord.enabled": true,
+    "twitchChat.oauth": "oauth:wc6qm3n5app3lolqctsqyh6t58zaky",
+    "twitchChat.channel": "jjooxz",
+    "twitchChat.username": "jjooxz"
+}
