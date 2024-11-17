@@ -1,10 +1,13 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:meta_financa/save_system.dart';
 
 class CategoryDetailsPage extends StatefulWidget {
   final Map<String, dynamic> category;
+  final SaveSystem save_system;
 
-  const CategoryDetailsPage({super.key, required this.category});
+  const CategoryDetailsPage(
+      {super.key, required this.category, required this.save_system});
 
   @override
   State<CategoryDetailsPage> createState() => _CategoryDetailsPageState();
@@ -49,10 +52,20 @@ class _CategoryDetailsPageState extends State<CategoryDetailsPage> {
 
   void _addOrRemoveMoney(double amount) {
     setState(() {
+      // Atualiza o valor da categoria
       widget.category['startingAmount'] += amount;
+
+      // Salva o histórico
+      widget.save_system.saveHistory(widget.category['name'], amount);
+
+      // Atualiza as categorias no arquivo
+      widget.save_system.saveCategories([widget.category]);
+
+      // Recalcula os percentuais
       _updatePercentages();
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -65,80 +78,88 @@ class _CategoryDetailsPageState extends State<CategoryDetailsPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              height: 400,
-              child: Stack(
-                children: <Widget>[
-                  PieChart(
-                    PieChartData(
-                      pieTouchData: PieTouchData(
-                        touchCallback: (FlTouchEvent event, pieTouchResponse) {
-                          setState(() {
-                            if (!event.isInterestedForInteractions ||
-                                pieTouchResponse == null ||
-                                pieTouchResponse.touchedSection == null) {
-                              touchedIndex = -1;
-                              return;
-                            }
-                            touchedIndex = pieTouchResponse
-                                .touchedSection!.touchedSectionIndex;
-                          });
-                        },
+            // Envolvendo o gráfico em um Expanded para evitar overflow
+            Expanded(
+              child: SizedBox(
+                height: 400, // Limite de altura para o gráfico
+                child: Stack(
+                  children: <Widget>[
+                    PieChart(
+                      PieChartData(
+                        pieTouchData: PieTouchData(
+                          touchCallback:
+                              (FlTouchEvent event, pieTouchResponse) {
+                            setState(() {
+                              if (!event.isInterestedForInteractions ||
+                                  pieTouchResponse == null ||
+                                  pieTouchResponse.touchedSection == null) {
+                                touchedIndex = -1;
+                                return;
+                              }
+                              touchedIndex = pieTouchResponse
+                                  .touchedSection!.touchedSectionIndex;
+                            });
+                          },
+                        ),
+                        centerSpaceRadius: 120,
+                        borderData: FlBorderData(show: false),
+                        sectionsSpace: 0,
+                        sections: [
+                          PieChartSectionData(
+                            value: percentageCurrentAmount,
+                            color: Colors.grey,
+                            radius: 55,
+                            title: '$currentAmount%',
+                            titleStyle: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                          PieChartSectionData(
+                            value: percentageGoal,
+                            color: const Color.fromARGB(255, 75, 75, 75),
+                            radius: 50,
+                            title: '$goal%',
+                            titleStyle: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
                       ),
-                      centerSpaceRadius: 120,
-                      borderData: FlBorderData(show: false),
-                      sectionsSpace: 0,
-                      sections: [
-                        PieChartSectionData(
-                          value: percentageCurrentAmount,
-                          color: Colors.grey,
-                          radius: 55,
-                          title: '$currentAmount%',
-                          titleStyle: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                        PieChartSectionData(
-                          value: percentageGoal,
-                          color: const Color.fromARGB(255, 75, 75, 75),
-                          radius: 50,
-                          title: '$goal%',
-                          titleStyle: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
                     ),
-                  ),
-                  Align(
-                    alignment: Alignment.center,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Meta: R\$ ${widget.category['goal'].toStringAsFixed(2)}",
-                          style:
-                              Theme.of(context).textTheme.titleLarge!.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 30,
-                                  ),
-                        ),
-                        Text(
-                          "Saldo Atual: R\$ ${widget.category['startingAmount'].toStringAsFixed(2)}",
-                          style:
-                              Theme.of(context).textTheme.titleLarge!.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                  ),
-                        ),
-                      ],
+                    Align(
+                      alignment: Alignment.center,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Meta: R\$ ${widget.category['goal'].toStringAsFixed(2)}",
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge!
+                                .copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 30,
+                                ),
+                          ),
+                          Text(
+                            "Saldo Atual: R\$ ${widget.category['startingAmount'].toStringAsFixed(2)}",
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge!
+                                .copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             const SizedBox(height: 20),

@@ -30,6 +30,9 @@ class AddCategoryForm extends StatelessWidget {
                   controller: nameController,
                   decoration:
                       const InputDecoration(labelText: 'Nome da Categoria'),
+                  inputFormatters: [
+                    LengthLimitingTextInputFormatter(20),
+                  ],
                 ),
                 TextField(
                   controller: startingAmountController,

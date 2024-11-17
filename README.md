@@ -9,10 +9,9 @@ Meta Finança is an app designed to help you organize your financial goals. You 
 - **Financial Goals Management**: Organize your goals into custom categories.
 - **Balance Control**: Add or remove amounts for each goal as needed.
 - **Simple and Intuitive Interface**: Focus on your finances with ease.
+- **Transaction History**: Saves every transaction for easy organization.
 
 ## Future Features
-
-- **Transaction History**: Saves every transaction for easy organization.
 - **Automatic Income Allocation**:
   - Shedule recurring incomes (e.g., monthly salary, weekly allowance)
   - Set up specific incomes for particular dates (e.g., birthday gifts).

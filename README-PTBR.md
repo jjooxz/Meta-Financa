@@ -9,10 +9,10 @@ Meta Finança é um aplicativo projetado para ajudar você a organizar suas meta
 - **Gestão de Metas Financeiras**: Organize suas metas em categorias personalizadas.
 - **Controle de Saldo**: Adicione ou remova valores para cada meta conforme necessário.
 - **Interface Simples e Intuitiva**: Concentre-se nas suas finanças com facilidade.
+- **Histórico de Transações**: Salva todas as transações para facilitar a organização.
 
 ## Funcionalidades Futuras
 
-- **Histórico de Transações**: Salva todas as transações para facilitar a organização.
 - **Alocação Automática de Receitas**:
   - Agende receitas recorrentes (ex.: salário mensal, mesada semanal).
   - Configure receitas específicas para datas particulares (ex.: presentes de aniversário).

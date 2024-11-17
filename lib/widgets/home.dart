@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:meta_financa/widgets/bottom_navigation_bar.dart';
 import 'package:meta_financa/const.dart';
 import 'package:meta_financa/widgets/categories.dart';
+import 'package:meta_financa/widgets/history.dart';
+import 'package:meta_financa/save_system.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -30,14 +32,18 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final textColor = !_isDarkMode ? kTextColorLight : kTextColorDark;
 
+    final saveSystem = SaveSystem();
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Meta Finança',
       theme: _isDarkMode ? ThemeData.dark() : ThemeData.light(),
       home: Scaffold(
         body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
+              transform: Matrix4.translationValues(0, 10, 0),
               padding: const EdgeInsets.only(top: 16),
               alignment: Alignment.center,
               child: SafeArea(
@@ -67,9 +73,10 @@ class _HomeScreenState extends State<HomeScreen> {
             Expanded(
               child: IndexedStack(
                 index: _currentIndex,
-                children: const [
-                  Categories(),
-                  Center(child: Text('Histórico')), // Exemplo para a aba Histórico
+                children: [
+                  Categories(saveSystem: saveSystem),
+                  History(saveSystem: saveSystem),
+                  const Center(child:Text("Alocações")),
                 ],
               ),
             ),

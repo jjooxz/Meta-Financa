@@ -48,9 +48,14 @@ class KBottomNavigationBar extends StatelessWidget {
               icon: Icons.history_outlined,
               label: 'Histórico',
               isSelected: currentIndex == 1,
-              iconOnRight: true,
               onTap: () => onTabSelected(1),
             ),
+            _buildNavItem(
+              icon: Icons.pie_chart_outline,
+              label: 'Alocações',
+              isSelected: currentIndex == 2,
+              onTap: () => onTabSelected(2),
+            )
           ],
         ),
       ),
@@ -66,23 +71,23 @@ class KBottomNavigationBar extends StatelessWidget {
   }) {
     final children = [
       if (!iconOnRight) isSelected ? GlowIcon(icon, size: 32, color: Colors.white, blurRadius: 10,) : Icon(icon, size: 32, color: Colors.white70),
-      if (!iconOnRight) const SizedBox(width: 8),
-      isSelected ? GlowText(label, blurRadius: 10, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white)) : Text(
+      if (!iconOnRight) const SizedBox(width: 1),
+      isSelected ? GlowText(label, blurRadius: 10, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.white)) : Text(
         label,
         style: TextStyle(
-          fontSize: 20,
+          fontSize: 15,
           fontWeight: FontWeight.bold,
           color: isSelected ? Colors.white : Colors.white70,
         ),
       ),
-      if (iconOnRight) const SizedBox(width: 8),
+      if (iconOnRight) const SizedBox(width: 1),
       if (iconOnRight) isSelected ? GlowIcon(icon, size: 32, color: Colors.white, blurRadius: 10,) : Icon(icon, size: 32, color: Colors.white70),
     ];
 
     return GestureDetector(
       onTap: onTap,
       child: SizedBox(
-        width: 130,
+        width: 110,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: children,

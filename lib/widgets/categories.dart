@@ -1,4 +1,6 @@
 // categories.dart
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:meta_financa/widgets/view_category.dart';
 import 'add_category_form.dart';
@@ -7,20 +9,31 @@ import 'package:meta_financa/save_system.dart';
 
 
 class Categories extends StatefulWidget {
-  const Categories({super.key});
+  final SaveSystem saveSystem;
+  const Categories({super.key, required this.saveSystem});
 
   @override
   State<Categories> createState() => _CategoriesState();
 }
 
 class _CategoriesState extends State<Categories> {
-  final SaveSystem saveSystem = SaveSystem();
   List<Map<String, dynamic>> categories = [];
-  // sync saveSystem with categories
+  // Usando saveSystem diretamente (sem o Future)
+  late SaveSystem saveSystem;
+
   @override
   void initState() {
     super.initState();
+    // Inicializando o saveSystem com o valor passado pelo widget
+    saveSystem = widget.saveSystem;
+    
+    // Carregar as categorias inicializadas
     _loadCategories();
+
+    // Atualiza as categorias a cada 2 segundos
+    Timer.periodic(const Duration(seconds: 2), (timer) {
+      _loadCategories();
+    });
   }
 
   Future<void> _loadCategories() async {
@@ -94,7 +107,9 @@ class _CategoriesState extends State<Categories> {
     final primaryColor = Theme.of(context).brightness == Brightness.light ? kBackgroundColorLight : kBackgroundColorDark;
     return Scaffold(   
       appBar: AppBar(
-        toolbarHeight: 20,
+        scrolledUnderElevation: 0,
+        toolbarHeight: 40,
+        backgroundColor: Theme.of(context).brightness == Brightness.light ? Color.fromARGB(255, 254, 247, 255) : Color.fromARGB(255, 20, 18, 24),
         title: Center(child: Text("Categorias", style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold))),
       ),
       body: ListView.builder(
@@ -160,12 +175,26 @@ Widget categoryList(Map<String, dynamic> category, List<Map<String, dynamic>> ca
           MaterialPageRoute(
             builder: (context) => CategoryDetailsPage(
               category: category, // Passando a categoria correta
-              // saveSystem: saveSystem, // Passando o sistema de salvamento
+              save_system: saveSystem, // Passando o sistema de salvamento
             ),
           ),
         );
       },
       title: Text(category['name'], style: Theme.of(context).textTheme.titleLarge!.copyWith(color: textColor)),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('R\$ ${category['startingAmount'].toStringAsFixed(2)} / R\$ ${category['goal'].toStringAsFixed(2)}', style: Theme.of(context).textTheme.titleLarge!.copyWith(color: textColor, fontSize: 16, fontWeight: FontWeight.bold)),
+          SizedBox(
+            width: 200,
+            child: LinearProgressIndicator(
+              value: category['startingAmount'] / category['goal'],
+              backgroundColor: Colors.grey,
+              valueColor: const AlwaysStoppedAnimation<Color>(kPrimaryColor),
+            ),
+          )
+        ]
+      ),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
