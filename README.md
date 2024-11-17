@@ -85,4 +85,4 @@ Contributions are welcome! Feel free to open issues or submit pull requests to i
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE). Feel free to use and modify it as needed.
+This project is licensed under the [Creative Commons Attribution Non-Commercial 4.0 International Licence](LICENSE). Feel free to use and modify it as needed.

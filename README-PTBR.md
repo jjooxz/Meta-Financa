@@ -84,4 +84,4 @@ Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou enviar
 
 ## Licença
 
-Este projeto está licenciado sob a [Licença MIT](LICENSE). Sinta-se à vontade para usar e modificar conforme necessário.
+Este projeto está licenciado sob a [Licença Creative Commons Attribution Non-Commercial 4.0 International](LICENSE). Sinta-se à vontade para usar e modificar conforme necessário.
